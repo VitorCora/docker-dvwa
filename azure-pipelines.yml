@@ -28,9 +28,9 @@ stages:
         tags: |
           $(tag)
 
-- task: SnykSecurityScan@1
-  inputs:
-    serviceConnectionEndpoint: 'Cora_Snyk'
-    testType: 'app'
-    monitorWhen: 'always'
-    failOnIssues: false
+    - task: SnykSecurityScan@1
+      inputs:
+        serviceConnectionEndpoint: 'Cora_Snyk'
+        testType: 'app'
+        monitorWhen: 'always'
+        failOnIssues: false

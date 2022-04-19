@@ -27,10 +27,3 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
           $(tag)
-
-    - task: SnykSecurityScan@1
-      inputs:
-        serviceConnectionEndpoint: 'Cora_Snyk'
-        testType: 'app'
-        monitorWhen: 'always'
-        failOnIssues: false

@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: vitorcoradockerdvwa 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vitorcoradockerdvwa
+  template:
+    metadata:
+      labels:
+        app: vitorcoradockerdvwa 
+    spec:
+      containers:
+        - name: vitorcoradockerdvwa 
+          image: azdevopsnv.azurecr.io/vitorcoradockerdvwa
+          ports:
+          - containerPort: 80

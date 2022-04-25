@@ -44,7 +44,6 @@ stages:
       inputs:
         serviceConnectionEndpoint: 'Coratest'
         testType: 'container'
-        dockerImageName: 'vitorcoradockerdvwa:44'
         dockerfilePath: '/home/vsts/work/1/s/Dockerfile'
         monitorWhen: 'always'
         failOnIssues: false

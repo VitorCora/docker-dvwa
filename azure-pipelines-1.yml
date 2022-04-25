@@ -45,6 +45,7 @@ stages:
         serviceConnectionEndpoint: 'Coratest'
         testType: 'container'
         dockerImageName: 'vitorcoradockerdvwa:44'
+        dockerfilePath: $(dockerfilePath)
         monitorWhen: 'always'
         failOnIssues: false
 
@@ -60,8 +61,6 @@ stages:
 
     - upload: manifests
       artifact: manifests
-
-
 
 - stage: Deploy
   displayName: Deploy stage

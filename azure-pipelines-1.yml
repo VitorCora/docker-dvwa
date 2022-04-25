@@ -31,7 +31,7 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
-    - task: Docker@2
+    - task: DockerBuild
       displayName: Build and push an image to container registry
       inputs:
         command: build
@@ -46,10 +46,10 @@ stages:
         testType: 'app'
         monitorWhen: 'always'
         failOnIssues: false
-    - task: Docker@3
+    - task: Docker
       displayName: Build and push an image to container registry
       inputs:
-        command: Push
+        command: DockerPush
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)

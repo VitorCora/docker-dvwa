@@ -34,7 +34,22 @@ stages:
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
-        command: buildAndPush
+        command: build
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+    - task: SnykSecurityScan@1
+      inputs:
+        serviceConnectionEndpoint: 'Coratest'
+        testType: 'app'
+        monitorWhen: 'always'
+        failOnIssues: false
+    - task: Docker@3
+      displayName: Build and push an image to container registry
+      inputs:
+        command: Push
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)

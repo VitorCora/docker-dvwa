@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: "aksdvwa-708f"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "aksdvwa-708f"
+  template:
+    metadata:
+      labels:
+        app: "aksdvwa-708f"
+    spec:
+      containers:
+        - name: "aksdvwa-708f"
+          image: "trendbrregistry.azurecr.io/aksdvwa"
+          ports:
+          - containerPort: 80

@@ -1,0 +1,50 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: trendbrregistry.azurecr.io
+        username: ${{ secrets.acr_trendbrregistry_username }}
+        password: ${{ secrets.acr_trendbrregistry_password }}
+    
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/" -f  "Dockerfile" -t trendbrregistry.azurecr.io/aksdvwa:${{ github.sha }} --label dockerfile-path=Dockerfile
+        docker push trendbrregistry.azurecr.io/aksdvwa:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{ secrets.aks_aksdvwa_kubeConfig }}
+      id: login
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep docker-dvwa-cora | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace docker-dvwa-cora`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: docker-dvwa-cora
+        container-registry-url: trendbrregistry.azurecr.io
+        container-registry-username: ${{ secrets.acr_trendbrregistry_username }}
+        container-registry-password: ${{ secrets.acr_trendbrregistry_password }}
+        secret-name: aksdvwadockerauth
+       
+    - uses: azure/k8s-deploy@v1.2
+      with:
+        namespace: docker-dvwa-cora
+        manifests: |
+          manifests/deployment-1.yml
+          manifests/service-1.yml
+        images: |
+          trendbrregistry.azurecr.io/aksdvwa:${{ github.sha }}
+        imagepullsecrets: |
+          aksdvwadockerauth

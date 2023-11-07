@@ -1,4 +1,4 @@
-FROM debian:9.3
+FROM debian:stretch
 
 LABEL maintainer "Hightech (hightech@backboxindonesia.or.id)"
 
